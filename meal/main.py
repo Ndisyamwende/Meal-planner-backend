@@ -32,6 +32,4 @@ def get_meal(meal_id: int,response: Response, db: Session = Depends(get_db), sta
     meal = db.query(models.Meal).filter(models.Meal.id == meal_id).first()
     if not meal:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Meal with id {meal_id} not available")
-        # response.status_code=status.HTTP_404_NOT_FOUND
-        # return {"detail": f"Meal with id {meal_id} not available"}
     return meal
