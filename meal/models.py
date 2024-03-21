@@ -11,3 +11,12 @@ class Meal(Base):
     ingredients = Column(JSON)
     recipe = Column(JSON)
     nutrition = Column(JSON)
+    
+class User(Base):
+    
+    __tablename__ = "users"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    email = Column(String)
+    password = Column(String)

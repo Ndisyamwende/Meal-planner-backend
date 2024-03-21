@@ -13,7 +13,8 @@ def get_db():
         yield db
     finally:
         db.close()
-
+        
+# Meals
 @app.post("/meal", status_code=status.HTTP_201_CREATED)
 def create_meal(request: schemas.Meal, db: Session = Depends(get_db)):
     new_meal = models.Meal(image=request.image, title=request.title, ingredients=request.ingredients, recipe=request.recipe, nutrition=request.nutrition)
@@ -51,3 +52,12 @@ def get_meal(meal_id: int,response: Response, db: Session = Depends(get_db)):
     if not meal:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Meal with id {meal_id} not available")
     return meal
+
+# User
+@app.post("/user", status_code=status.HTTP_201_CREATED)
+def create_user(request: schemas.User, db: Session = Depends(get_db)):
+    new_user = models.User(name=request.name, email=request.email, password=request.password)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user
