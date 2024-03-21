@@ -45,8 +45,8 @@ def get_meals(db: Session = Depends(get_db)):
     meals = db.query(models.Meal).all()
     return meals
 
-@app.get("/meal/{meal_id}")
-def get_meal(meal_id: int,response: Response, db: Session = Depends(get_db), status_code=status.HTTP_200_OK):
+@app.get("/meal/{meal_id}", status_code=status.HTTP_200_OK, response_model=schemas.ShowMeal)
+def get_meal(meal_id: int,response: Response, db: Session = Depends(get_db)):
     meal = db.query(models.Meal).filter(models.Meal.id == meal_id).first()
     if not meal:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Meal with id {meal_id} not available")

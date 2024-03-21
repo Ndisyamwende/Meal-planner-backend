@@ -7,3 +7,8 @@ class Meal(BaseModel):
     ingredients: List[Union[str, int]]
     recipe: List[Union[str, int]]
     nutrition: Dict[str, Union[str, int]]
+    
+    
+class ShowMeal(BaseModel):
+    class Config:
+        orm_mode = True
