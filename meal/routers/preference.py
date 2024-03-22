@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
 from .. import database, schemas, oauth2
 from ..repository import preference
@@ -12,7 +12,9 @@ get_db = database.get_db
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
 def create_preference(request: schemas.Preferences, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
-    return preference.create(request, db)
+    if current_user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not authenticated")
+    return preference.create(request, current_user.id, db)
 
 @router.get('/')
 def get_preferences(db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
