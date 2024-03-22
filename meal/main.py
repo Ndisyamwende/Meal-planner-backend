@@ -16,7 +16,7 @@ def get_db():
         db.close()
         
 # Meals
-@app.post("/meal", status_code=status.HTTP_201_CREATED)
+@app.post("/meal", status_code=status.HTTP_201_CREATED, tags=['meals'])
 def create_meal(request: schemas.Meal, db: Session = Depends(get_db)):
     new_meal = models.Meal(image=request.image, title=request.title, ingredients=request.ingredients, recipe=request.recipe, nutrition=request.nutrition)
     db.add(new_meal)
@@ -24,7 +24,7 @@ def create_meal(request: schemas.Meal, db: Session = Depends(get_db)):
     db.refresh(new_meal)
     return new_meal
 
-@app.delete("/meal/{meal_id}", status_code=status.HTTP_204_NO_CONTENT)
+@app.delete("/meal/{meal_id}", status_code=status.HTTP_204_NO_CONTENT, tags=['meals'])
 def delete_meal(meal_id: int, db: Session = Depends(get_db)):
     meal = db.query(models.Meal).filter(models.Meal.id == meal_id)
     if not meal.first():
@@ -33,7 +33,7 @@ def delete_meal(meal_id: int, db: Session = Depends(get_db)):
     db.commit()
     return "done"
 
-@app.put("/meal/{meal_id}", status_code=status.HTTP_202_ACCEPTED)
+@app.put("/meal/{meal_id}", status_code=status.HTTP_202_ACCEPTED, tags=['meals'])
 def update_meal(meal_id: int, request: schemas.Meal, db: Session = Depends(get_db)):
     meal = db.query(models.Meal).filter(models.Meal.id == meal_id)
     if not meal.first():
@@ -42,12 +42,12 @@ def update_meal(meal_id: int, request: schemas.Meal, db: Session = Depends(get_d
     db.commit()
     return "updated"
 
-@app.get("/meal")
+@app.get("/meal", tags=['meals'])
 def get_meals(db: Session = Depends(get_db)):
     meals = db.query(models.Meal).all()
     return meals
 
-@app.get("/meal/{meal_id}", status_code=status.HTTP_200_OK)
+@app.get("/meal/{meal_id}", status_code=status.HTTP_200_OK, tags=['meals'])
 def get_meal(meal_id: int,response: Response, db: Session = Depends(get_db)):
     meal = db.query(models.Meal).filter(models.Meal.id == meal_id).first()
     if not meal:
@@ -55,7 +55,7 @@ def get_meal(meal_id: int,response: Response, db: Session = Depends(get_db)):
     return meal
 
 # User
-@app.post("/user", status_code=status.HTTP_201_CREATED, response_model=schemas.ShowUser)
+@app.post("/user", status_code=status.HTTP_201_CREATED, response_model=schemas.ShowUser, tags=['users'])
 def create_user(request: schemas.User, db: Session = Depends(get_db)):
     
     new_user = models.User(name=request.name, email=request.email, password=Encryption.encrypt(request.password))
@@ -64,7 +64,7 @@ def create_user(request: schemas.User, db: Session = Depends(get_db)):
     db.refresh(new_user)
     return new_user
 
-@app.get("/user/{user_id}", response_model=schemas.ShowUser)
+@app.get("/user/{user_id}", response_model=schemas.ShowUser, tags=['users'])
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
