@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, status, Response, HTTPException
 from . import schemas, models
 from .database import engine, SessionLocal
 from sqlalchemy.orm import Session
+from .encryption import Encryption
 
 app = FastAPI()
 
@@ -37,7 +38,7 @@ def update_meal(meal_id: int, request: schemas.Meal, db: Session = Depends(get_d
     meal = db.query(models.Meal).filter(models.Meal.id == meal_id)
     if not meal.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Meal with id {meal_id} not found")
-    meal.update(request.dict())
+    meal.update(request.model_dump())
     db.commit()
     return "updated"
 
@@ -46,7 +47,7 @@ def get_meals(db: Session = Depends(get_db)):
     meals = db.query(models.Meal).all()
     return meals
 
-@app.get("/meal/{meal_id}", status_code=status.HTTP_200_OK, response_model=schemas.ShowMeal)
+@app.get("/meal/{meal_id}", status_code=status.HTTP_200_OK)
 def get_meal(meal_id: int,response: Response, db: Session = Depends(get_db)):
     meal = db.query(models.Meal).filter(models.Meal.id == meal_id).first()
     if not meal:
@@ -54,10 +55,18 @@ def get_meal(meal_id: int,response: Response, db: Session = Depends(get_db)):
     return meal
 
 # User
-@app.post("/user", status_code=status.HTTP_201_CREATED)
+@app.post("/user", status_code=status.HTTP_201_CREATED, response_model=schemas.ShowUser)
 def create_user(request: schemas.User, db: Session = Depends(get_db)):
-    new_user = models.User(name=request.name, email=request.email, password=request.password)
+    
+    new_user = models.User(name=request.name, email=request.email, password=Encryption.encrypt(request.password))
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return new_user
+
+@app.get("/user/{user_id}", response_model=schemas.ShowUser)
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id {user_id} not found")
+    return user
