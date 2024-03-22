@@ -2,8 +2,8 @@ from fastapi import status, HTTPException
 from sqlalchemy.orm import Session
 from .. import models, schemas
 
-def create(request: schemas.Preferences, db: Session):
-    new_preference = models.Preferences(allergens=request.allergens, dietary_type=request.dietary_type, user_id=1)
+def create(request: schemas.Preferences, user_id: int, db: Session):
+    new_preference = models.Preferences(allergens=request.allergens, dietary_type=request.dietary_type, user_id=user_id)
     db.add(new_preference)
     db.commit()
     db.refresh(new_preference)
