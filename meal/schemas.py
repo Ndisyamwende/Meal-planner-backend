@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Dict, Union
+from typing import List, Dict, Union, Optional
 
 class Meal(BaseModel):
     image: str
@@ -40,3 +40,15 @@ class ShowPreferences(BaseModel):
     
     class Config:
         orm_mode = True
+        
+class Login(BaseModel):
+    username: str
+    password: str
+    
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    email: Optional[str] = None
