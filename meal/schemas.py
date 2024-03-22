@@ -18,13 +18,25 @@ class User(BaseModel):
     email: str
     password: str
     
+class Preferences(BaseModel):
+    allergens: str
+    dietary_type: str
+    
+    class Config:
+        orm_mode = True
+    
 class ShowUser(BaseModel):
     name: str
     email: str
+    preferences : List[Preferences] = []
     
     class Config:
         orm_mode = True
         
-class Preferences(BaseModel):
+class ShowPreferences(BaseModel):
     allergens: str
     dietary_type: str
+    owner: ShowUser
+    
+    class Config:
+        orm_mode = True
