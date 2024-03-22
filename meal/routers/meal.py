@@ -11,7 +11,7 @@ router = APIRouter(
 get_db = database.get_db
 
 @router.get("/")
-def get_meals(db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+def get_meals(db: Session = Depends(get_db)):
     return meal.get(db)
 
 @router.post("/", status_code=status.HTTP_201_CREATED)

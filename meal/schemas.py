@@ -4,6 +4,8 @@ from typing import List, Dict, Union, Optional
 class Meal(BaseModel):
     image: str
     title: str
+    time: str
+    serves: int
     ingredients: List[Union[str, int]]
     recipe: List[Union[str, int]]
     nutrition: Dict[str, Union[str, int]]
