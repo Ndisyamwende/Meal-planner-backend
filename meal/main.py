@@ -65,7 +65,7 @@ def create_user(request: schemas.User, db: Session = Depends(get_db)):
     return new_user
 
 @app.get("/user/{user_id}", response_model=schemas.ShowUser, tags=['users'])
-def get_user(user_id: int, db: Session = Depends(get_db)):
+def get_user(user_id: int,response: Response, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id {user_id} not found")
@@ -74,7 +74,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
 # Preferences
 @app.post('/preference', status_code=status.HTTP_201_CREATED, tags=['preferences'])
 def create_preference(request: schemas.Preferences, db: Session = Depends(get_db)):
-    new_preference = models.Preferences(allergens=request.allergens, dietary_type=request.dietary_type)
+    new_preference = models.Preferences(allergens=request.allergens, dietary_type=request.dietary_type, user_id=1)
     db.add(new_preference)
     db.commit()
     db.refresh(new_preference)
@@ -84,6 +84,13 @@ def create_preference(request: schemas.Preferences, db: Session = Depends(get_db
 def get_preferences(db: Session = Depends(get_db)):
     preferences = db.query(models.Preferences).all()
     return preferences
+
+@app.get('/preference/{preference_id}', status_code=status.HTTP_200_OK, response_model=schemas.ShowPreferences, tags=['preferences'])
+def get_preference(preference_id: int,response: Response, db: Session = Depends(get_db)):
+    preference = db.query(models.Preferences).filter(models.Preferences.id == preference_id).first()
+    if not preference:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Preference with id {preference_id} not found")
+    return preference
 
 @app.put('/preference/{preference_id}', status_code=status.HTTP_202_ACCEPTED, tags=['preferences'])
 def update_preference(preference_id: int, request: schemas.Preferences, db: Session = Depends(get_db)):

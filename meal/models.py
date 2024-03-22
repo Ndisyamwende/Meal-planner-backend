@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, JSON
+from sqlalchemy import Column, Integer, String, JSON, ForeignKey
 from .database import Base
+from sqlalchemy.orm import relationship
 
 class Meal(Base):
     
@@ -21,6 +22,8 @@ class User(Base):
     email = Column(String)
     password = Column(String)
     
+    preferences = relationship("Preferences", back_populates="owner")
+    
 class Preferences(Base):
     
     __tablename__ = "preferences"
@@ -28,3 +31,6 @@ class Preferences(Base):
     id = Column(Integer, primary_key=True, index=True)
     allergens = Column(String)
     dietary_type = Column(String)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    
+    owner = relationship("User", back_populates="preferences")
