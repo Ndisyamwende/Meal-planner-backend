@@ -24,3 +24,7 @@ class ShowUser(BaseModel):
     
     class Config:
         orm_mode = True
+        
+class Preferences(BaseModel):
+    allergens: str
+    dietary_type: str

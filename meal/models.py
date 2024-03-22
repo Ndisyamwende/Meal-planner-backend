@@ -20,3 +20,11 @@ class User(Base):
     name = Column(String)
     email = Column(String)
     password = Column(String)
+    
+class Preferences(Base):
+    
+    __tablename__ = "preferences"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    allergens = Column(String)
+    dietary_type = Column(String)
