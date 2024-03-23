@@ -9,6 +9,8 @@ class Meal(Base):
     id = Column(Integer, primary_key=True, index=True)
     image = Column(String)
     title = Column(String)
+    time = Column(String)
+    serves = Column(Integer)
     ingredients = Column(JSON)
     recipe = Column(JSON)
     nutrition = Column(JSON)
