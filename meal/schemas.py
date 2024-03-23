@@ -16,7 +16,6 @@ class ShowMeal(BaseModel):
         orm_mode = True
         
 class User(BaseModel):
-    name: str
     email: str
     password: str
     
@@ -28,7 +27,6 @@ class Preferences(BaseModel):
         orm_mode = True
     
 class ShowUser(BaseModel):
-    name: str
     email: str
     preferences : List[Preferences] = []
     
