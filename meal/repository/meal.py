@@ -7,7 +7,7 @@ def get(db: Session):
     return meals
 
 def create(request: schemas.Meal, db: Session):
-    new_meal = models.Meal(image=request.image, title=request.title, ingredients=request.ingredients, recipe=request.recipe, nutrition=request.nutrition)
+    new_meal = models.Meal(image=request.image, title=request.title, time=request.time, serves=request.serves, ingredients=request.ingredients, recipe=request.recipe, nutrition=request.nutrition)
     db.add(new_meal)
     db.commit()
     db.refresh(new_meal)
