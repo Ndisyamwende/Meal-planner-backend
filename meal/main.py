@@ -7,7 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 origins = [
-    "http://localhost:5173",  # React app
+    "http://localhost:5173",
+    "http://localhost:3000",# React app
     # add more origins if needed
 ]
 
