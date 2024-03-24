@@ -27,5 +27,5 @@ def update_meal(meal_id: int, request: schemas.Meal, db: Session = Depends(get_d
     return meal.update(meal_id, request, db)
 
 @router.get("/{meal_id}", status_code=status.HTTP_200_OK)
-def get_meal(meal_id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
+def get_meal(meal_id: int, db: Session = Depends(get_db)):
     return meal.get_meal(meal_id, db)
