@@ -9,6 +9,8 @@ app = FastAPI()
 origins = [
     "http://localhost:5173",
     "http://localhost:3000",
+    "https://ndisyamwende.github.io",
+    "https://ndisyamwende.github.io/Mindful-meal-planner"
 ]
 
 app.add_middleware(
