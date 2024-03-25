@@ -4,7 +4,7 @@ from .. import models, schemas
 from ..encryption import Encryption
 
 def create(request: schemas.User, db: Session):
-    new_user = models.User(name=request.name, email=request.email, password=Encryption.encrypt(request.password))
+    new_user = models.User(email=request.email, password=Encryption.encrypt(request.password))
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
